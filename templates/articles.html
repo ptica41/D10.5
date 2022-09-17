@@ -1,0 +1,53 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+Articles
+{% endblock title %}
+
+{% block content %}
+<h1>Статьи</h1>
+{% if articles %}
+<h2>Количество статей: {{ amount }}</h2>
+<table align="center">
+    <tr>
+        <td>
+            Заголовок
+        </td>
+        <td>
+            Дата публикации
+        </td>
+        <td>
+            Описание
+        </td>
+    </tr>
+    {% for i in articles %}
+    {% if i.type == 1 %}
+    <tr>
+        <td>{{ i.head|censor }}</td>
+        <td>{{ i.time|date:'d M Y' }}</td>
+        <td>{{ i.text|truncatechars:20|censor }}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+{% else %}
+<h2>Статей нет!</h2>
+{% endif %}
+   {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+   {{ page_obj.number }}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+{% endblock content %}
